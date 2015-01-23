@@ -1,15 +1,37 @@
-var cash = 100000;
-var price = 105;
+function sketchProc(processing) {
+  processing.setup = function() {
+    noStroke();
 
-function buying (currentPrice, smaLine) {
-  var sharesToBuy = Math.floor(cash * 0.05 / price);
-  console.log("sharesToBuy: " + sharesToBuy);
-  var cashToWithdraw = sharesToBuy * price;
-  console.log("cashToWithdraw: " + cashToWithdraw);
-  // if(currentPrice < smaLine && currentPrice < averagePricePaid) {
-  //
-  // }
 
+  };
+  var leftX = 143;
+  var rightX = 262;
+  var sunRadius = 100;
+  processing.draw = function() {
+    size(400,400);
+
+    background(184, 236, 255);
+
+    fill(255, 170, 0);
+    ellipse(200, 100, sunRadius, sunRadius);
+
+    // clouds
+    fill(255, 255, 255);
+    // left cloud
+    ellipse(leftX, 150, 126, 97);
+    ellipse(leftX+62, 150, 70, 60);
+    ellipse(leftX-62, 150, 70, 60);
+
+    // right cloud
+    ellipse(rightX, 100, 126, 97);
+    ellipse(rightX+62, 100, 70, 60);
+    ellipse(rightX-62, 100, 70, 60);
+
+    leftX--;
+    rightX++;
+    sunRadius +=2;
+  };
 }
-
-buying(50,55);
+var canvas = document.getElementById("canvas2");
+// attaching the sketchProc function to the canvas
+var processingInstance = new Processing(canvas, sketchProc);

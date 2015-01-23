@@ -3,33 +3,29 @@
   <head>
     <meta charset="utf-8">
     <title>Trading Simulation Test</title>
-    <script src="processing-1.4.8.js"></script>
-    <script type='text/javascript' src='tradeSim.js'></script>
+    <script language="javascript" type="text/javascript" src="p5/p5.js"></script>
+    <script language="javascript" type="text/javascript" src="p5/addons/p5.dom.js"></script>
+    <script type='text/javascript' src='trade.js'></script>
 
-    <!-- <script type='text/javascript' src='test.js'></script> -->
 
   </head>
   <body>
        <h1>Trading Simulation</h1>
        <h2>with a random stock price</h2>
-       <canvas data-processing-sources="trading.pde"></canvas>
-       <p><canvas data-processing-sources="tradeSim.js" id="canvas1" width="200" height="200"></canvas></p>
+           <form id="form1">
+                 Buy Rule:<br>
+                 If the stock price is below the <div id = "smaPeriods1"> </div>day Simple Moving Average<br>
+                 Then trade <div id="cashAmount"> </div>% of cash account?<br> <br>
+                 Sell Rule:<br>
+                 If stock price is <div id="stockDrop"> </div> above the average cost basis<br>
+                 Then trade <div id="percentSell" value =5> </div>% the number of shares owned each applicable period?<br>
 
-       <form id="form1">
-         Buy Rule:<br>
-         If the stock price crosses
-          <input type="number" size=3 min=0 max=100 name="stockDrop">%
-          below the <input type="number" size=3 min=0 max=100 name="avgDays">day Simple Moving Average<br>
-         Then trade <input type="number" size=3 min=0 max=100 name="cashAmount">% of cash account?<br> <br>
-         Sell Rule:<br>
-         If stock price crosses <input type="number" size=3 min=0 max=100 name="stockDrop">% above the <input type="number" size=3 min=0 max=100 name="avgDays"> day Simple Moving Average<br>
-         Then trade <input type="number" size=3 min=0 max=100 name="cashAmount">% of shares owned?<br>
+                 <button onclick="startSimulation()">Try it</button>
+           </form>
 
-         <button onclick="startSimulation()">Try it</button>
-         <button onclick="buying()">Test</button>
-       </form>
-
-       <p id="demo"></p>
+       <div>
+         <p id="demo"></p>
+       </div>
 
 
 
