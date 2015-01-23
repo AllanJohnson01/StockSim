@@ -1,4 +1,6 @@
 var x=0;
+var investorA;
+var stockA;
 var smaInput;
 var buyPercInput;
 var stockDropPercInput;
@@ -7,38 +9,45 @@ var volatilitySlider;
 
 function setup() {
    frameRate(100);
-   smaInput = createInput(15).attribute( "type", "number").attribute("min", 2).attribute("max", 100).size(40).parent("smaPeriods1").value();
+   smaInput = createInput(15).attribute( "type", "number").attribute("min", 2).attribute("max", 100).size(40).parent("smaPeriods1");
    console.log("smaInput: " + smaInput);
-   buyPercInput = createInput(5).attribute("type", "number").attribute("min",1).attribute("max", 100).size(40).parent("cashAmount").value();
+   buyPercInput = createInput().attribute("type", "number").attribute("min",1).attribute("max", 100).size(40).parent("cashAmount");
    console.log("buyPercInput: " + buyPercInput);
    //stockDropPercInput = createInput(5).attribute("type", "number").attribute("min",1).attribute("max", 100).size(40).parent("stockDrop").value();
-   percentSellInput = createInput(5).attribute("type", "number").attribute("min",1).attribute("max", 100).size(40).parent("percentSell").value();
+   percentSellInput = createInput().attribute("type", "number").attribute("min",1).attribute("max", 100).size(40).parent("percentSell");
    console.log("percentSellInput: " + percentSellInput);
-   volatilitySlider = createSlider(0,30,15).value();
-   console.log("volatility: " + volatilitySlider);
+   volatilitySlider = createSlider(0,30,15);
+   console.log("volatility: " + volatilitySlider.value());
 
    createCanvas(800, 400).position(350,100);
 
    background(244, 244, 255);
    translate(0, height);
+   stockA = new Stock(100, smaInput.value(), volatilitySlider.value());
+   investorA = new Investor(1000000);
    stockA.tradeSim(investorA);
 
 }
 
 function draw() {
    stroke(152, 152, 152, 70);
+   text(stockA.allPrices[x].net,100,-200);
    line(0, stockA.allPrices[0].price*(-1), width, stockA.allPrices[0].price*(-1));
    stroke(0);
    line(x, stockA.allPrices[x].price*(-1), x+1, stockA.allPrices[x+1].price*(-1));
    stroke(250, 41, 236);
    line(x, stockA.allPrices[x].sma*(-1), x+1, stockA.allPrices[x+1].sma*(-1));
    stroke(185, 120, 16);
-   line(x, stockA.allPrices[x].costBasis*(-1), x+1, stockA.allPrices[x+1].costBasis*(-1));
+   // line(x, stockA.allPrices[x].costBasis*(-1), x+1, stockA.allPrices[x+1].costBasis*(-1));
+   // console.log("costBasis: " + costBasis);
    stroke(53, 199, 0);
    line(x, stockA.allPrices[x].profit*(-1), x+1, stockA.allPrices[x+1].profit*(-1));
-   text(stockA.allPrices[x].net, width-100,40);
+   stroke(0, 76, 31);
+   text(stockA.allPrices[x].net,100,-140);
+
 
    while(x < width-2) {
+      // console.log(stockA.allPrices[x].net);
       x++;
       return;
    }
@@ -46,6 +55,7 @@ function draw() {
 
 function startSimulation() {
     stockA.tradeSim(investorA);
+
 }
 
 
@@ -83,7 +93,6 @@ function Investor (cash) {
     pricesPaid.push({cost: -cashToDeposit, shares: -sharesToSell});
   };
 }
-var investorA = new Investor(1000000);
 
 
 function Stock (price, smaPeriods, volatility) {
@@ -113,11 +122,12 @@ function Stock (price, smaPeriods, volatility) {
       averagePricePaid(invest.getHistory(), invest);
       // Buying decision
       if(this.price < simpleMovingAverage(smaArray)) {
-        invest.buy(this.price, buyPercInput/100);
+         console.log("buyPercInput: " + buyPercInput.value());
+        invest.buy(this.price, buyPercInput.value()/100);
       }
       // Selling Decision
       else if(this.price > invest.costBasis) {
-        invest.sell(this.price, percentSellInput/100);
+        invest.sell(this.price, percentSellInput.value()/100);
       }
 
       this.allPrices.push({
@@ -132,7 +142,7 @@ function Stock (price, smaPeriods, volatility) {
     }
   };
 }
-var stockA = new Stock(100, smaInput, volatilitySlider);
+
 
 
 averagePricePaid = function (array, inv) {
